@@ -4,10 +4,10 @@ import "google/protobuf/timestamp.proto";
 
 package order;
 
-option  go_package = ".;order";
+option  go_package = "./order;order";
 
 // Req
-message createReq {
+message createOrderReq {
   // 数额
   float amount = 1;
   // 币种
@@ -18,19 +18,19 @@ message createReq {
   uint64 productId = 4;
 }
 
-message payReq {
+message payOrderReq {
   // 支付金额
   float amount = 1;
   // 备注
   string remark = 2;
 }
 
-message cancelReq {
+message cancelOrderReq {
   // 备注
   string remark = 1;
 }
 
-message IndexReq {
+message IndexOrderReq {
   // 分页
   int32 page = 1;
   // 类型

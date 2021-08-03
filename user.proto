@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package user;
+
+option  go_package = "./user;user";
+
+// Req
+message createReq {
+  // 账号
+  string username = 1;
+  // 密码
+  string password = 2;
+}
+
+message loginReq {
+  // 账号
+  string username = 1;
+  // 密码
+  string password = 2;
+}
+
+message updatePasswordReq {
+  // 密码
+  string password = 1;
+}
+
+message IndexReq {
+  // 分页
+  int32 page = 1;
+  // 关键字
+  string keyword = 2;
+}
+
+// Res
+message user {
+  uint64 id = 1;
+  string username = 2;
+  string password = 3;
+  int32 status = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
+}
+
+message userId {
+  uint64 id = 1;
+}
+
+message commonRes {
+  int32 code = 1;
+  string err = 2;
+}
+
+message dataRes {
+  int32 code = 1;
+  string err = 2;
+  repeated user data = 3;
+}
+
+service User {
+  // 创建
+  rpc Create(createReq) returns (userId);
+  // 登录
+  rpc Login(loginReq) returns (commonRes);
+  // 更新
+  rpc UpdatePassword(updatePasswordReq) returns (commonRes);
+  // 列表
+  rpc Index(IndexReq) returns (dataRes);
+  // 详情
+  rpc Show(userId) returns (user);
+}
