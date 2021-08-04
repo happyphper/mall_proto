@@ -7,7 +7,7 @@ package order;
 option  go_package = "./order;order";
 
 // Req
-message createOrderReq {
+message createReq {
   // 数额
   float amount = 1;
   // 币种
@@ -18,19 +18,19 @@ message createOrderReq {
   uint64 productId = 4;
 }
 
-message payOrderReq {
+message payReq {
   // 支付金额
   float amount = 1;
   // 备注
   string remark = 2;
 }
 
-message cancelOrderReq {
+message cancelReq {
   // 备注
   string remark = 1;
 }
 
-message IndexOrderReq {
+message IndexReq {
   // 分页
   int32 page = 1;
   // 类型
