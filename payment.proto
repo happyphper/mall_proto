@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package payment;
+
+option  go_package = "./payment;payment";
+
+message payReq {
+  // 支付金额
+  float amount = 1;
+  // 备注
+  string remark = 2;
+}
+
+message cancelReq {
+  // 备注
+  string remark = 1;
+}
+
+// Res
+message record {
+  uint64 id = 1;
+  int32 user_id = 2;
+  int32 coin_id = 3;
+  float amount = 4;
+  float paid_amount = 5;
+  int32 status = 6;
+  google.protobuf.Timestamp paid_at = 7;
+  google.protobuf.Timestamp canceled_at = 8;
+  google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp updated_at = 10;
+}
+
+message recordId {
+  uint64 id = 1;
+}
+
+message commonRes {
+  int32 code = 1;
+  string err = 2;
+}
+
+message dataRes {
+  int32 code = 1;
+  string err = 2;
+  repeated record data = 3;
+}
+
+service Payment {
+  // 支付订单
+  rpc Pay(payReq) returns (commonRes);
+  // 撤销订单
+  rpc Cancel(cancelReq) returns (commonRes);
+  // 支付记录
+  rpc Show(recordId) returns (record);
+}
