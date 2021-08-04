@@ -6,45 +6,96 @@ package user;
 
 option  go_package = "./user;user";
 
-// Req
-message createReq {
-  // 账号
-  string username = 1;
+// 注册
+message registerReq {
+  // 手机
+  string mobile = 1;
   // 密码
   string password = 2;
+  // 邀请码
+  string invitation_code = 3;
 }
 
+// 登录
 message loginReq {
   // 账号
-  string username = 1;
+  string mobile = 1;
   // 密码
   string password = 2;
 }
 
-message updatePasswordReq {
-  // 密码
+// 重置密码
+message resetPasswordReq {
   string password = 1;
 }
 
-message IndexReq {
+// 更新密码
+message updatePasswordReq {
+  string password = 1;
+}
+
+// 修改交易密码
+message updateTradePasswordReq {
+  string password = 1;
+}
+
+// 创建
+message createReq {
+  // 手机
+  string mobile = 1;
+  // 密码
+  string password = 2;
+  // 邀请码
+  string invitation_code = 3;
+}
+
+// 禁用
+message disableReq {
+  uint64 user_id = 1;
+  int32 type = 2;
+  string remark = 3;
+}
+
+// 启用
+message enableReq {
+  uint64 user_id = 1;
+}
+
+// 列表
+message indexReq {
   // 分页
   int32 page = 1;
   // 关键字
   string keyword = 2;
 }
 
+// 详情
+message userIdReq {
+  uint64 id = 1;
+}
+
+// 空请求
+message emptyReq {}
+
 // Res
 message user {
   uint64 id = 1;
-  string username = 2;
-  string password = 3;
+  string mobile = 2;
   int32 status = 4;
   google.protobuf.Timestamp created_at = 5;
   google.protobuf.Timestamp updated_at = 6;
 }
 
-message userId {
-  uint64 id = 1;
+message userRes {
+  int32 code = 1;
+  string err = 2;
+  user user = 3;
+}
+
+message usersRes {
+  int32 code = 1;
+  string err = 2;
+  repeated user users = 3;
 }
 
 message commonRes {
@@ -52,21 +103,33 @@ message commonRes {
   string err = 2;
 }
 
-message dataRes {
-  int32 code = 1;
-  string err = 2;
-  repeated user data = 3;
+message tokenRes {
+  string token = 1;
+}
+
+message userIdRes {
+  uint64 id = 1;
 }
 
 service User {
-  // 创建
-  rpc Create(createReq) returns (userId);
+  // 注册
+  rpc Register(registerReq) returns (userIdRes);
   // 登录
-  rpc Login(loginReq) returns (commonRes);
-  // 更新
+  rpc Login(loginReq) returns (tokenRes);
+  // 用户信息
+  rpc UserInfo(emptyReq) returns (user);
+  // 创建
+  rpc ResetPassword(resetPasswordReq) returns (commonRes);
+  // 更新登录密码
   rpc UpdatePassword(updatePasswordReq) returns (commonRes);
+  // 更新交易密码
+  rpc UpdateTradePassword(updateTradePasswordReq) returns (commonRes);
+  // 更新登录密码
+  rpc Disable(disableReq) returns (commonRes);
+  // 更新交易密码
+  rpc Enable(enableReq) returns (commonRes);
   // 列表
-  rpc Index(IndexReq) returns (dataRes);
+  rpc Index(indexReq) returns (usersRes);
   // 详情
-  rpc Show(userId) returns (user);
+  rpc Show(userIdReq) returns (userRes);
 }
